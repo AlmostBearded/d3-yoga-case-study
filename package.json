@@ -1,0 +1,35 @@
+{
+  "name": "svg-layout-case-study",
+  "version": "1.0.0",
+  "description": "A case study that experiments with layouting visualization elements using the Yoga layout engine.",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx gulp build",
+    "start": "npx gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlmostBearded/svg-layout-case-study.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AlmostBearded/svg-layout-case-study/issues"
+  },
+  "homepage": "https://github.com/AlmostBearded/svg-layout-case-study#readme",
+  "devDependencies": {
+    "browser-sync": "^2.26.10",
+    "del": "^5.1.0",
+    "gulp": "^4.0.2",
+    "gulp-cli": "^2.3.0",
+    "gulp-sass": "^4.1.0",
+    "node-sass": "^4.14.1",
+    "rollup": "^2.23.0",
+    "@rollup/plugin-commonjs": "^11.0.2",
+    "@rollup/plugin-node-resolve": "^7.1.1"
+  },
+  "dependencies": {
+    "yoga-layout-prebuilt": "^1.9.6"
+  }
+}
