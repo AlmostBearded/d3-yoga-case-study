@@ -22,7 +22,7 @@ const del = require('del');
 
 async function bundleYogaCaseStudy() {
   const bundle = await rollup.rollup({
-    input: 'src/yoga-case-study.js',
+    input: 'src/index.js',
     plugins: [
       rollupCommonJs(),
       rollupNodeResolve(),
@@ -45,7 +45,7 @@ async function bundleYogaCaseStudy() {
     ],
   });
   return bundle.write({
-    file: `dist/yoga-case-study.js`,
+    file: `dist/index.js`,
     format: 'iife',
     name: 'caseStudy',
     plugins: [],
