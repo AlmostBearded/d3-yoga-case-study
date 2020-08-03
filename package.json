@@ -23,8 +23,6 @@
     "del": "^5.1.0",
     "gulp": "^4.0.2",
     "gulp-cli": "^2.3.0",
-    "gulp-sass": "^4.1.0",
-    "node-sass": "^4.14.1",
     "rollup": "^2.23.0",
     "@rollup/plugin-commonjs": "^11.0.2",
     "@rollup/plugin-node-resolve": "^7.1.1"
