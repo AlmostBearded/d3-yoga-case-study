@@ -40,10 +40,7 @@ var numericScale = d3
   .range([boundingRect.height, 0]);
 
 // Create the root node of the chart
-var svgSelection = d3
-  .select('#chart')
-  .append('svg')
-  .attr('viewBox', `0, 0, ${boundingRect.width}, ${boundingRect.height}`);
+var svgSelection = d3.select('#chart').append('svg');
 
 // Cached selection variables
 var numericAxisSelection, categoricAxisSelection, barsSelection;
@@ -81,18 +78,12 @@ function scaffoldChart() {
   {
     var row1Selection = svgSelection
       .append('g')
-      .attr(
-        'yogaLayout',
-        'flex-direction: row;align-items: stretch;flex-grow: 1'
-      );
+      .attr('yogaLayout', 'flex-direction: row;align-items: stretch;flex-grow: 1');
     {
       numericAxisSelection = row1Selection
         .append('g')
         .classed('numeric-axis', true)
-        .attr(
-          'yogaLayout',
-          'flex-direction: row; flex-grow: 0; flex-shrink: 0'
-        );
+        .attr('yogaLayout', 'flex-direction: row; flex-grow: 0; flex-shrink: 0');
       {
         numericAxisSelection
           .append('text')
@@ -122,10 +113,7 @@ function scaffoldChart() {
         'flex-direction: column; margin-left: $.numeric-axis#width; flex-grow: 0; flex-shrink: 0'
       );
     {
-      categoricAxisSelection
-        .append('g')
-        .classed('ticks', true)
-        .attr('yogaLayout', 'height: auto');
+      categoricAxisSelection.append('g').classed('ticks', true).attr('yogaLayout', 'height: auto');
 
       categoricAxisSelection
         .append('text')
@@ -136,10 +124,7 @@ function scaffoldChart() {
 }
 
 function renderCategoricAxis() {
-  categoricAxisSelection.attr(
-    'transform',
-    `scale(${+config.categoricAxis.visible}, 1)`
-  );
+  categoricAxisSelection.attr('transform', `scale(${+config.categoricAxis.visible}, 1)`);
 
   categoricAxisSelection
     .select('.ticks')
@@ -156,10 +141,7 @@ function renderCategoricAxis() {
 }
 
 function renderNumericAxis() {
-  numericAxisSelection.attr(
-    'transform',
-    `scale(${+config.numericAxis.visible}, 1)`
-  );
+  numericAxisSelection.attr('transform', `scale(${+config.numericAxis.visible}, 1)`);
 
   numericAxisSelection
     .select('.title')
@@ -174,12 +156,7 @@ function renderNumericAxis() {
     .call(d3.axisLeft(numericScale))
     .attr('font-size', null)
     .attr('font-family', null)
-    .call((e) =>
-      e.attr(
-        'transform',
-        `translate(${e.node().getBoundingClientRect().width}, 0)`
-      )
-    );
+    .call((e) => e.attr('transform', `translate(${e.node().getBoundingClientRect().width}, 0)`));
 }
 
 function renderBars() {
@@ -199,18 +176,13 @@ function updateLayout() {
   boundingRect = getBoundingRect('#chart');
 
   // Update the viewbox of the chart
-  var svgSelection = d3
-    .select('#chart')
-    .select('svg')
-    .attr('viewBox', `0, 0, ${boundingRect.width}, ${boundingRect.height}`);
+  svgSelection.attr('viewBox', `0, 0, ${boundingRect.width}, ${boundingRect.height}`);
 
   // Calculate the layout
   layoutParser.calculateLayout(boundingRect.width, boundingRect.height);
 
   // Resize the range of the scale to fit into the calculated size of the bar drawing area
-  var barsLayoutNode = layoutParser.nodeToLayoutNodeMap.get(
-    barsSelection.node()
-  );
+  var barsLayoutNode = layoutParser.nodeToLayoutNodeMap.get(barsSelection.node());
   categoricScale.range([0, barsLayoutNode.getComputedWidth()]);
   numericScale.range([barsLayoutNode.getComputedHeight(), 0]);
 
