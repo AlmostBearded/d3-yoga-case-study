@@ -7,6 +7,9 @@ export default function yogaLayoutParser() {
   // Maps DOM nodes to Yoga nodes
   var nodeToLayoutNodeMap = new Map();
 
+  // Maps DOM nodes to layout transforms
+  var nodeToLayoutTransformMap = new Map();
+
   // Whether or not the layout has already been calculated
   var layoutCalculated = false;
 
@@ -143,6 +146,9 @@ export default function yogaLayoutParser() {
       // console.log(node);
       rootNode = rootNode || node;
 
+      // Init transform attribute for later layout application
+      nodeToLayoutTransformMap.set(node, '');
+
       var layoutNode = yoga.Node.create();
       nodeToLayoutNodeMap.set(node, layoutNode);
 
@@ -192,12 +198,17 @@ export default function yogaLayoutParser() {
     applyLayout() {
       // Apply a translation on all yogaLayout nodes to mirror the layout.
       for (var [node, layoutNode] of nodeToLayoutNodeMap.entries()) {
-        node.setAttribute(
-          'transform',
-          `translate(${layoutNode.getComputedLeft()}, ${layoutNode.getComputedTop()})${
-            node.getAttribute('transform') || ''
-          }`
-        );
+        var transform = node.getAttribute('transform') || '';
+
+        // Remove the previous layout transform
+        transform = transform.replace(nodeToLayoutTransformMap.get(node), '');
+
+        // Set the new layout transform
+        var newTransform = `translate(${layoutNode.getComputedLeft()}, ${layoutNode.getComputedTop()})`;
+        nodeToLayoutTransformMap.set(node, newTransform);
+        transform = `${newTransform}${transform}`;
+
+        node.setAttribute('transform', transform);
       }
     },
   };

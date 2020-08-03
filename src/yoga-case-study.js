@@ -25,27 +25,26 @@ var config = {
   },
 };
 
-// Calculating size of the container
-var containerSelection = d3.select('#chart');
-var containerBoundingRect = containerSelection.node().getBoundingClientRect();
-var containerSize = [containerBoundingRect.width, containerBoundingRect.height];
+// Calculate bounding rect of the chart
+var boundingRect = getBoundingRect('#chart');
 
 // Setting up the initial scales for the full size of the container
 var categoricScale = d3
   .scaleBand()
   .domain(data.map((d) => d.city))
   .padding(0.05)
-  .range([0, containerSize[0]]);
+  .range([0, boundingRect.width]);
 
 var numericScale = d3
   .scaleLinear()
   .domain([0, d3.max(data, (d) => d.population)])
-  .range([containerSize[1], 0]);
+  .range([boundingRect.height, 0]);
 
 // Create the root node of the chart
-var svgSelection = containerSelection
+var svgSelection = d3
+  .select('#chart')
   .append('svg')
-  .attr('viewBox', `0, 0, ${containerSize[0]}, ${containerSize[1]}`);
+  .attr('viewBox', `0, 0, ${boundingRect.width}, ${boundingRect.height}`);
 
 // Cached selection variables
 var numericAxisSelection, categoricAxisSelection, barsSelection;
@@ -57,23 +56,20 @@ scaffoldChart();
 renderCategoricAxis();
 renderNumericAxis();
 
-// Parse the node hierarchy and calculate the layout
+// Create layout parser and parse node hierarchy
 var layoutParser = yogaLayoutParser();
 layoutParser.parseNodeHierarchy(svgSelection.node());
-layoutParser.calculateLayout(containerSize[0], containerSize[1]);
 
-// Resize the range of the scale to fit into the calculated size of the bar drawing area
-var barsLayoutNode = layoutParser.nodeToLayoutNodeMap.get(barsSelection.node());
-categoricScale.range([0, barsLayoutNode.getComputedWidth()]);
-numericScale.range([barsLayoutNode.getComputedHeight(), 0]);
+// Update the layout to fit into the bounding rect dimensions
+updateLayout();
 
-// Rerender the axes and render the bars now that the scales have correct ranges
-renderCategoricAxis();
-renderNumericAxis();
-renderBars();
+window.addEventListener('resize', updateLayout);
 
-// Position the different nodes according to the layout
-layoutParser.applyLayout();
+// Get the bounding rect of a node
+function getBoundingRect(selector) {
+  var node = document.querySelector(selector);
+  return node.getBoundingClientRect();
+}
 
 // Scaffold the desired layout of the chart using yogaLayout attributes
 function scaffoldChart() {
@@ -197,4 +193,33 @@ function renderBars() {
     .attr('y', (d) => numericScale(d.population))
     .attr('height', (d) => numericScale(0) - numericScale(d.population))
     .attr('width', categoricScale.bandwidth());
+}
+
+function updateLayout() {
+  // Update the size of the bounding rect
+  boundingRect = getBoundingRect('#chart');
+
+  // Update the viewbox of the chart
+  var svgSelection = d3
+    .select('#chart')
+    .select('svg')
+    .attr('viewBox', `0, 0, ${boundingRect.width}, ${boundingRect.height}`);
+
+  // Calculate the layout
+  layoutParser.calculateLayout(boundingRect.width, boundingRect.height);
+
+  // Resize the range of the scale to fit into the calculated size of the bar drawing area
+  var barsLayoutNode = layoutParser.nodeToLayoutNodeMap.get(
+    barsSelection.node()
+  );
+  categoricScale.range([0, barsLayoutNode.getComputedWidth()]);
+  numericScale.range([barsLayoutNode.getComputedHeight(), 0]);
+
+  // Rerender the axes and render the bars now that the scales have correct ranges
+  renderCategoricAxis();
+  renderNumericAxis();
+  renderBars();
+
+  // Position the different nodes according to the layout
+  layoutParser.applyLayout();
 }
