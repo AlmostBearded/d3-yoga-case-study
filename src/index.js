@@ -1,5 +1,4 @@
 import * as d3 from 'd3';
-import { svg } from 'd3';
 import yogaLayoutParser from './yoga-layout-parser';
 
 // Data representing the populations of large Austrian cities
