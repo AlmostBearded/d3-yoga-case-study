@@ -2,13 +2,16 @@
 
 This is a case study evaluating layouting of individual elements of D3 charts with the Yoga layout engine.
 
-Layouting is done via custom `yogaLayout` attributes which are strongly inspired by CSS Flexbox properties. Special post-layout variables have been added to the default Flexbox specification to allow for 2-dimensional layouting similar to CSS Grid. 
+Layouting is done via custom `yogaLayout` attributes which are strongly inspired by CSS Flexbox properties. Special post-layout variables have been added to the default Flexbox specification to allow for 2-dimensional layouting similar to CSS Grid.
 
 The 2 main files of the case study are:
+
 - `src/yoga-layout-parser.js`: Implements a parser for DOM hierarchies that are decorated with `yogaLayout` attributes.
 - `src/index.js`: Implements a bar chart that uses the `yogaLayoutParser` to layout the individual elements.
 
 The code is quite clean and fairly well documented so it should not be to hard to get a grasp on how things are done.
+
+A live version of the `master` branch can be found at [d3-yoga-case-study.netlify.app](https://d3-yoga-case-study.netlify.app/).
 
 # Commands
 
@@ -39,7 +42,6 @@ npx gulp serve
 ```
 
 or simply
-
 
 ```
 npx gulp
